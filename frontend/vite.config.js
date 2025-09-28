@@ -20,7 +20,10 @@ export default defineConfig(({ mode }) => {
       '/api': {
         target: env.VITE_APP_API_URL || 'http://localhost:8000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        bypass: (req, res, options) => {
+          console.log(`Proxying request:${req.url} => ${options.target}`);
+        }
       }
     }
   },
