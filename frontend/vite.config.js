@@ -6,7 +6,7 @@ import { resolve } from 'path'
 export default defineConfig(({ mode }) => {
   // 根据当前工作环境加载env文件
   const env = loadEnv(mode, process.cwd())
-  
+  console.log('当前环境变量:', env)
   return {
   plugins: [vue()],
   resolve: {

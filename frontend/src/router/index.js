@@ -5,10 +5,11 @@ import { useAuthStore } from '../stores/auth'
 import AdminLayout from '../layouts/AdminLayout.vue'
 
 // 页面
-import Login from '../views/Login.vue'
-import Dashboard from '../views/Dashboard.vue'
-import UserManagement from '../views/UserManagement.vue'
-import NotFound from '../views/NotFound.vue'
+import Login from '@/views/login/index.vue'
+import LoginCallback from '@/views/login/callbackFeishu.vue'
+import Dashboard from '@/views/dashboard/index.vue'
+import UserManagement from '@/views/user/index.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +19,12 @@ const router = createRouter({
       name: 'login',
       component: Login,
       meta: { requiresAuth: false }
-    },
+      },
+      {
+          path: '/login/callback',
+          name: 'LoginCallback',
+          component: LoginCallback
+      },
     {
       path: '/',
       component: AdminLayout,

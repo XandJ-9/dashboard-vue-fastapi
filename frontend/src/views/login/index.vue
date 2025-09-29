@@ -77,6 +77,16 @@
                 创建账户
               </a>
             </p>
+
+            <hr class="my-8" />
+            <button @click="goFeishuLogin" class="btn-secondary w-full mt-4 text-sm font-medium leading-5 text-center transition-colors duration-150 flex items-center justify-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.6667 10C16.6667 13.3137 14.1667 16 10 16C5.83333 16 3.33333 13.3137 3.33333 10C3.33333 6.68629 5.83333 4 10 4C14.1667 4 16.6667 6.68629 16.6667 10Z" fill="white"/>
+                <path d="M10 13.3333C11.8536 13.3333 13.3333 11.8536 13.3333 10C13.3333 8.14644 11.8536 6.66667 10 6.66667C8.14644 6.66667 6.66667 8.14644 6.66667 10C6.66667 11.8536 8.14644 13.3333 10 13.3333Z" fill="#0065FF"/>
+                <path d="M13.3333 10C13.3333 11.8536 11.8536 13.3333 10 13.3333C8.14644 13.3333 6.66667 11.8536 6.66667 10C6.66667 8.14644 8.14644 6.66667 10 6.66667C11.8536 6.66667 13.3333 8.14644 13.3333 10Z" fill="white" fill-opacity="0.3"/>
+            </svg>
+            第三方登录
+            </button>
           </div>
         </div>
       </div>
@@ -87,9 +97,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
-import officeLightImg from '../assets/images/office-light.jpg'
-import officeDarkImg from '../assets/images/office-dark.jpg'
+import { useAuthStore } from '@/stores/auth'
+import officeLightImg from '@/assets/images/office-light.jpg'
+import officeDarkImg from '@/assets/images/office-dark.jpg'
+
 
 const router = useRouter()
 const route = useRoute()
@@ -100,6 +111,11 @@ const username = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
+
+const FEISHU_APP_ID = import.meta
+const FEISHU_REDIRECT_URI = import.meta
+
+
 
 // 处理登录
 const handleLogin = async () => {
@@ -131,5 +147,17 @@ const handleLogin = async () => {
   } finally {
     loading.value = false
   }
+}
+
+
+const goFeishuLogin = () => {
+  // 生成随机 state，防止 CSRF
+  const state = Math.random().toString(36).substring(2)
+  localStorage.setItem('feishu_state', state)
+
+  // 拼接飞书 OAuth 授权地址
+  const authUrl = `https://open.feishu.cn/open-apis/authen/v1/index?app_id=${FEISHU_APP_ID}&redirect_uri=${FEISHU_REDIRECT_URI}&state=${state}`
+  console.log('Redirecting to:', authUrl)
+  window.location.href = authUrl
 }
 </script>
